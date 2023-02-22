@@ -8,9 +8,6 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
       body: SafeArea(
           minimum: const EdgeInsets.all(16),
           child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
@@ -74,7 +71,7 @@ class _SignInForm extends StatefulWidget {
 class __SignInFormState extends State<_SignInForm> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   bool _autoValidate = false;
 
   @override
@@ -83,7 +80,7 @@ class __SignInFormState extends State<_SignInForm> {
 
     _onLoginButtonPressed() {
       if (_key.currentState!.validate()) {
-        _loginBloc.add(LoginInWithEmailButtonPressed(email: _emailController.text, password: _passwordController.text));
+        _loginBloc.add(LoginInWithUsernameButtonPressed(username: _usernameController.text, password: _passwordController.text));
       } else {
         setState(() {
           _autoValidate = true;
@@ -113,26 +110,32 @@ class __SignInFormState extends State<_SignInForm> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Email address',
+                      border: UnderlineInputBorder(),
+                      labelText: 'Nombre de Usuario',
                       filled: true,
                       isDense: true,
                     ),
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
+                    controller: _usernameController,
+                    keyboardType: TextInputType.name,
                     autocorrect: false,
                     validator: (value) {
                       if (value == null) {
-                        return 'Email is required.';
+                        return 'Nombre de Usuario necesario';
                       }
                       return null;
                     },
                   ),
                   SizedBox(
-                    height: 12,
+                    height: 10,
+                    width: 10,
+                    child: TextField(
+                      style: TextStyle(fontSize: 40.0),
+                    ),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Password',
+                      border: UnderlineInputBorder(),
+                      labelText: 'Contraseña',
                       filled: true,
                       isDense: true,
                     ),
@@ -140,13 +143,14 @@ class __SignInFormState extends State<_SignInForm> {
                     controller: _passwordController,
                     validator: (value) {
                       if (value == null) {
-                        return 'Password is required.';
+                        return 'Contraseña necesaria';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(
-                    height: 16,
+                    height: 10,
+                    width: 10,
                   ),
                   //RaisedButton(
                   ElevatedButton(  
@@ -154,7 +158,7 @@ class __SignInFormState extends State<_SignInForm> {
                     //textColor: Colors.white,
                     //padding: const EdgeInsets.all(16),
                     //shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(8.0)),
-                    child: Text('LOG IN'),
+                    child: Text('Inicia Sesión'),
                     onPressed: state is LoginLoading ? () {} : _onLoginButtonPressed,
                   )
                 ],

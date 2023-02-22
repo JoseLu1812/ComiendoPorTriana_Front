@@ -16,17 +16,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         _authenticationBloc = authenticationBloc,
         _authenticationService = authenticationService,
         super(LoginInitial()) {
-          on<LoginInWithEmailButtonPressed>(__onLogingInWithEmailButtonPressed);
+          on<LoginInWithUsernameButtonPressed>(__onLogingInWithEmailButtonPressed);
         }
 
 
   __onLogingInWithEmailButtonPressed(
-    LoginInWithEmailButtonPressed event,
+    LoginInWithUsernameButtonPressed event,
     Emitter<LoginState> emit,
   ) async {
     emit(LoginLoading());
     try {
-      final user = await _authenticationService.signInWithEmailAndPassword(event.email, event.password);
+      final user = await _authenticationService.signInWithUsernameAndPassword(event.username, event.password);
       if (user != null) {
         _authenticationBloc.add(UserLoggedIn(user: user));
         emit(LoginSuccess());

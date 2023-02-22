@@ -11,7 +11,7 @@ import 'package:comiendoportriana/repositories/repositories.dart';
 
 abstract class AuthenticationService {
   Future<User?> getCurrentUser();
-  Future<User> signInWithEmailAndPassword(String email, String password);
+  Future<User> signInWithUsernameAndPassword(String username, String password);
   Future<void> signOut();
 }
 /*
@@ -67,8 +67,8 @@ class JwtAuthenticationService extends AuthenticationService {
   }
 
   @override
-  Future<User> signInWithEmailAndPassword(String email, String password) async {
-    LoginResponse response = await _authenticationRepository.doLogin(email, password);
+  Future<User> signInWithUsernameAndPassword(String username, String password) async {
+    LoginResponse response = await _authenticationRepository.doLogin(username, password);
     //await _localStorageService.saveToDisk('user', jsonEncode(response.toJson()));
     await _localStorageService.saveToDisk('user_token', response.token);
     return User.fromLoginResponse(response);
