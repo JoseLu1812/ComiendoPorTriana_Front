@@ -8,6 +8,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.red.shade800,
       body: SafeArea(
           minimum: const EdgeInsets.all(16),
           child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
@@ -108,6 +109,10 @@ class __SignInFormState extends State<_SignInForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
+                  Image.asset(
+                    "assets/images/logo-login.png",
+                    height: 250,
+                  ),
                   TextFormField(
                     decoration: InputDecoration(
                       border: UnderlineInputBorder(),

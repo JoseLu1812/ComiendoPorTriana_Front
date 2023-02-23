@@ -2,6 +2,7 @@ class LoginResponse {
   String? id;
   String? username;
   String? fullName;
+  String? email;
   String? createdAt;
   String? token;
   String? refreshToken;
@@ -10,6 +11,7 @@ class LoginResponse {
       {this.id,
       this.username,
       this.fullName,
+      this.email,
       this.createdAt,
       this.token,
       this.refreshToken});
@@ -18,6 +20,7 @@ class LoginResponse {
     id = json['id'];
     username = json['username'];
     fullName = json['fullName'];
+    email = json['email'];
     createdAt = json['createdAt'];
     token = json['token'];
     refreshToken = json['refreshToken'];
@@ -28,13 +31,12 @@ class LoginResponse {
     data['id'] = id;
     data['username'] = username;
     data['fullName'] = fullName;
+    data['email'] = email;
     data['token'] = token;
     data['refreshToken'] = refreshToken;
     return data;
   }
-  
 }
-
 
 class LoginRequest {
   String? username;

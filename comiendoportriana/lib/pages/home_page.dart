@@ -1,5 +1,6 @@
 import 'package:comiendoportriana/pages/bar_page.dart';
 import 'package:comiendoportriana/pages/login_page.dart';
+import 'package:comiendoportriana/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:comiendoportriana/blocs/authentication/authentication.dart';
@@ -20,8 +21,7 @@ List<Widget> _widgetOptions = <Widget>[
   return Text("Loading");
   }),
 
-  LoginPage(),
-  BaresPage(),
+  ProfilePage(),
   
 ]; 
 
@@ -47,7 +47,8 @@ class HomePage extends StatefulWidget {
     final authBloc = BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset('assets/images/logo1.png'),
+        backgroundColor: Colors.white,
+        title: Image.asset('assets/images/logo-title.png'),
         actions: <Widget>[
           IconButton(onPressed:() => {authBloc.add(UserLoggedOut())}, icon: Icon(Icons.logout))
         ],
@@ -58,10 +59,6 @@ class HomePage extends StatefulWidget {
           BottomNavigationBarItem(
             icon: Icon(Icons.restaurant),
             label: 'Restaurantes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

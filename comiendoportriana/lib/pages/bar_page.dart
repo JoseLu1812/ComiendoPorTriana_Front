@@ -14,7 +14,7 @@ class BaresPage extends StatelessWidget {
     return Scaffold(
       body: BlocProvider(
         create: (_) => BarBloc(/*httpClient: http.Client()*/)..add(BarFetched()),
-        child: const BarsList(),
+        child: BarsList(),
       ),
     );
   }
