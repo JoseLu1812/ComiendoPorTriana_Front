@@ -152,12 +152,7 @@ class __SignInFormState extends State<_SignInForm> {
                     height: 10,
                     width: 10,
                   ),
-                  //RaisedButton(
                   ElevatedButton(  
-                    //color: Theme.of(context).primaryColor,
-                    //textColor: Colors.white,
-                    //padding: const EdgeInsets.all(16),
-                    //shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(8.0)),
                     child: Text('Inicia Sesión'),
                     onPressed: state is LoginLoading ? () {} : _onLoginButtonPressed,
                   )
@@ -171,13 +166,7 @@ class __SignInFormState extends State<_SignInForm> {
   }
 
   void _showError(String error) {
-    /*Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text(error),
-      backgroundColor: Theme.of(context).errorColor,
-    ));*/
-
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
-
-
   }
+
 }
