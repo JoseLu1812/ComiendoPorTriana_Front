@@ -27,20 +27,17 @@ class _BarsListState extends State<BarsList> {
       builder: (context, state) {
         switch (state.status) {
           case BarStatus.failure:
-            return const Center(child: Text('failed to fetch Bars'));
+            return const Center(child: Text('failed to fetch Bar'));
           case BarStatus.success:
-            if (state.bares.isEmpty) {
-              return const Center(child: Text('no Bars'));
+            if (state.bar!.isEmpty) {
+              return const Center(child: Text('no bar'));
             }
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
-                return index >= state.bares.length
+                return index >= state.bar!.length
                     ? const BottomLoader()
-                    : BarListItem(barContent: state.bares[index]);
+                    : BarListItem(bar: state.bar!.elementAt(index));
               },
-              itemCount: state.hasReachedMax
-                  ? state.bares.length
-                  : state.bares.length + 1,
               controller: _scrollController,
             );
           case BarStatus.initial:

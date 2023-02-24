@@ -30,15 +30,6 @@ class BarBloc extends Bloc<BarEvent, BarState> {
     on<BarFetched>(_onBarFetched);
   }
 
-/* BarBloc() : super(const BarState()) {
-    repo = GetIt.I.get<BarRepository>();
-   on<BarFetched>(
-      _onPostFetched,
-      transformer: throttleDroppable(throttleDuration),
-    );
-  }
-*/
-
   Future<void> _onBarFetched(
     BarFetched event,
     Emitter<BarState> emit,
@@ -47,26 +38,16 @@ class BarBloc extends Bloc<BarEvent, BarState> {
     try {
       if (state.status == BarStatus.initial) {
         //final posts = await _fetchPosts();
-        final bares = await _repo.fetchPosts();
+        final bar = await _repo.fetchBares();
+        final List<BarContent> bares = bar.content!;
         return emit(
           state.copyWith(
             status: BarStatus.success,
-            bares: bares,
+            bar: bares,
             hasReachedMax: false,
           ),
         );
       }
-      //final posts = await _fetchPosts(state.posts.length);
-      final bares = await _repo.fetchPosts(state.bares.length);
-      bares.isEmpty
-          ? emit(state.copyWith(hasReachedMax: true))
-          : emit(
-              state.copyWith(
-                status: BarStatus.success,
-                bares: List.of(state.bares)..addAll(bares),
-                hasReachedMax: false,
-              ),
-            );
     } catch (_) {
       emit(state.copyWith(status: BarStatus.failure));
     }

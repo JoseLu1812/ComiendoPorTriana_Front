@@ -74,7 +74,7 @@ class _ProfileUIState extends State<ProfileUI> {
                     margin: EdgeInsets.all(5),
                     child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                            backgroundColor: Colors.red.shade700),
+                            backgroundColor: Colors.white),
                         onPressed: () {
                           context
                               .read<AuthenticationBloc>()
