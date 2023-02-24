@@ -53,14 +53,13 @@ class _ProfileUIState extends State<ProfileUI> {
               child: Center(
                 child: Column(children: [
                   Text(
-                    state.user!.username as String,
+                    state.user!.username!,
                     style: TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
                   ),
                   Text(
-                    state.user!.fullName as String,
+                    state.user!.fullName!,
                     style: TextStyle(fontSize: 15),
                   ),
-                  Text(state.user!.email as String),
                   Container(
                     margin: EdgeInsets.all(5),
                     child: ElevatedButton(

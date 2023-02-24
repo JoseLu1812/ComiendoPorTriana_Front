@@ -8,23 +8,18 @@ import 'package:comiendoportriana/config/locator.dart';
 import 'package:comiendoportriana/services/services.dart';
 import '../models/models.dart';
 
-
 List<Widget> _widgetOptions = <Widget>[
-
   BlocBuilder<AuthenticationBloc, AuthenticationState>(
       builder: (context, state) {
-   if (state is AuthenticationNotAuthenticated) {
-     return LoginPage();
-   } else if (state is AuthenticationAuthenticated) {
+    if (state is AuthenticationNotAuthenticated) {
+      return LoginPage();
+    } else if (state is AuthenticationAuthenticated) {
       return BaresPage();
     }
-  return Text("Loading");
+    return Text("Loading");
   }),
-
   ProfilePage(),
-  
-]; 
-
+];
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required});
@@ -33,24 +28,31 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-  class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
     final authBloc = BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Image.asset('assets/images/logo-title.png'),
+        leading: Image.asset('assets/images/logo-title.png', 
+            color: Colors.red.shade800,
+        ),
+        title: Image.asset('assets/images/logo-title.png',
+            height: 180, 
+            color: Colors.white,
+        ),
         actions: <Widget>[
-          IconButton(onPressed:() => {authBloc.add(UserLoggedOut())}, icon: Icon(Icons.logout))
+          IconButton(
+              onPressed: () => {authBloc.add(UserLoggedOut())},
+              icon: Icon(Icons.logout))
         ],
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
@@ -66,10 +68,9 @@ class HomePage extends StatefulWidget {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        //selectedItemColor: Colors.amber[700],
         onTap: _onItemTapped,
       ),
     );
   }
 }
-

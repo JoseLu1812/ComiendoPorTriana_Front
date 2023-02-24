@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 
 const _postLimit = 20;
 
+@Order(-1)
 @singleton
 class BarRepository {
 

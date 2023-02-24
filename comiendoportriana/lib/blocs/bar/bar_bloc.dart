@@ -12,27 +12,34 @@ part 'bar_event.dart';
 part 'bar_state.dart';
 
 const throttleDuration = Duration(milliseconds: 100);
+var page = 0;
 
-
-EventTransformer  <E> throttleDroppable<E>(Duration duration) {
+EventTransformer<E> throttleDroppable<E>(Duration duration) {
   return (events, mapper) {
     return droppable<E>().call(events.throttle(duration), mapper);
   };
 }
 
 class BarBloc extends Bloc<BarEvent, BarState> {
-  BarBloc() : super(const BarState()) {
+  final BarRepository _repo;
+
+  BarBloc(BarRepository barRepository)
+      : assert(barRepository != null),
+        _repo = barRepository,
+        super(BarState()) {
+    on<BarFetched>(_onBarFetched);
+  }
+
+/* BarBloc() : super(const BarState()) {
     repo = GetIt.I.get<BarRepository>();
-    on<BarFetched>(
+   on<BarFetched>(
       _onPostFetched,
       transformer: throttleDroppable(throttleDuration),
     );
   }
-  
-  late BarRepository repo;
+*/
 
-
-  Future<void> _onPostFetched(
+  Future<void> _onBarFetched(
     BarFetched event,
     Emitter<BarState> emit,
   ) async {
@@ -40,7 +47,7 @@ class BarBloc extends Bloc<BarEvent, BarState> {
     try {
       if (state.status == BarStatus.initial) {
         //final posts = await _fetchPosts();
-        final bares = await repo.fetchPosts();
+        final bares = await _repo.fetchPosts();
         return emit(
           state.copyWith(
             status: BarStatus.success,
@@ -50,7 +57,7 @@ class BarBloc extends Bloc<BarEvent, BarState> {
         );
       }
       //final posts = await _fetchPosts(state.posts.length);
-      final bares = await repo.fetchPosts(state.bares.length);
+      final bares = await _repo.fetchPosts(state.bares.length);
       bares.isEmpty
           ? emit(state.copyWith(hasReachedMax: true))
           : emit(
@@ -64,5 +71,4 @@ class BarBloc extends Bloc<BarEvent, BarState> {
       emit(state.copyWith(status: BarStatus.failure));
     }
   }
-  
 }

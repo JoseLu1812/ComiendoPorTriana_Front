@@ -8,7 +8,6 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red.shade800,
       body: SafeArea(
           minimum: const EdgeInsets.all(16),
           child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
@@ -111,7 +110,7 @@ class __SignInFormState extends State<_SignInForm> {
                 children: <Widget>[
                   Image.asset(
                     "assets/images/logo-login.png",
-                    height: 250,
+                    height: 350,
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -139,7 +138,8 @@ class __SignInFormState extends State<_SignInForm> {
                   ),
                   TextFormField(
                     decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
+
+                      border: UnderlineInputBorder(), 
                       labelText: 'Contraseña',
                       filled: true,
                       isDense: true,
@@ -159,7 +159,7 @@ class __SignInFormState extends State<_SignInForm> {
                   ),
                   ElevatedButton(  
                     child: Text('Inicia Sesión'),
-                    onPressed: state is LoginLoading ? () {} : _onLoginButtonPressed,
+                    onPressed: state is LoginLoading ? () {} : _onLoginButtonPressed,                                   
                   )
                 ],
               ),
