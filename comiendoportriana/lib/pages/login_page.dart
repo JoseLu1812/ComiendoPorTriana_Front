@@ -1,3 +1,4 @@
+import 'package:comiendoportriana/pages/register_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:comiendoportriana/config/locator.dart';
@@ -16,7 +17,8 @@ class LoginPage extends StatelessWidget {
               if (state is AuthenticationNotAuthenticated) {
                 return _AuthForm();
               }
-              if (state is AuthenticationFailure || state is SessionExpiredState) {
+              if (state is AuthenticationFailure ||
+                  state is SessionExpiredState) {
                 var msg = (state as AuthenticationFailure).message;
                 return Center(
                     child: Column(
@@ -80,7 +82,9 @@ class __SignInFormState extends State<_SignInForm> {
 
     _onLoginButtonPressed() {
       if (_key.currentState!.validate()) {
-        _loginBloc.add(LoginInWithUsernameButtonPressed(username: _usernameController.text, password: _passwordController.text));
+        _loginBloc.add(LoginInWithUsernameButtonPressed(
+            username: _usernameController.text,
+            password: _passwordController.text));
       } else {
         setState(() {
           _autoValidate = true;
@@ -103,7 +107,9 @@ class __SignInFormState extends State<_SignInForm> {
           }
           return Form(
             key: _key,
-            autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
+            autovalidateMode: _autoValidate
+                ? AutovalidateMode.always
+                : AutovalidateMode.disabled,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -111,14 +117,14 @@ class __SignInFormState extends State<_SignInForm> {
                   Image.asset(
                     "assets/images/logo-login.png",
                     height: 350,
+                    color: Colors.red.shade800,
                   ),
                   TextFormField(
                     decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      labelText: 'Nombre de Usuario',
-                      filled: true,
-                      isDense: true,
-                    ),
+                        border: UnderlineInputBorder(),
+                        labelText: 'Nombre de Usuario',
+                        filled: true,
+                        isDense: true),
                     controller: _usernameController,
                     keyboardType: TextInputType.name,
                     autocorrect: false,
@@ -138,8 +144,7 @@ class __SignInFormState extends State<_SignInForm> {
                   ),
                   TextFormField(
                     decoration: InputDecoration(
-
-                      border: UnderlineInputBorder(), 
+                      border: UnderlineInputBorder(),
                       labelText: 'Contraseña',
                       filled: true,
                       isDense: true,
@@ -157,10 +162,25 @@ class __SignInFormState extends State<_SignInForm> {
                     height: 10,
                     width: 10,
                   ),
-                  ElevatedButton(  
-                    child: Text('Inicia Sesión'),
-                    onPressed: state is LoginLoading ? () {} : _onLoginButtonPressed,                                   
-                  )
+                  Container(
+                    margin: EdgeInsets.all(5),
+                    child: ElevatedButton(
+                      child: Text('Inicia Sesión'),
+                      onPressed:
+                          state is LoginLoading ? () {} : _onLoginButtonPressed,
+                      ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(5),
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                            backgroundColor: Colors.white),
+                                            onPressed: () {
+                      Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => RegisterFormPage()));
+                      },
+                      child: Text('Registrarse')),
+                  ),
                 ],
               ),
             ),
@@ -173,5 +193,4 @@ class __SignInFormState extends State<_SignInForm> {
   void _showError(String error) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
   }
-
 }

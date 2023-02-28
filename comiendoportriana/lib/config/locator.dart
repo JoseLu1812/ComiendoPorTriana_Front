@@ -11,7 +11,6 @@ final getIt = GetIt.instance;
 void configureDependencies() => getIt.init();
 
 void setupAsyncDependencies() {
-  //var localStorageService = await LocalStorageService.getInstance();
-  //getIt.registerSingleton(localStorageService);
-  getIt.registerSingletonAsync<LocalStorageService>(() => LocalStorageService.getInstance());
+  getIt.registerSingletonAsync<LocalStorageService>(
+    () => LocalStorageService.getInstance());
 }

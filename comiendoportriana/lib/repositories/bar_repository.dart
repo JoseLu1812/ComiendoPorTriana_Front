@@ -1,30 +1,34 @@
-
-import 'package:comiendoportriana/models/bar.dart';
+import 'package:comiendoportriana/models/bar_list.dart';
+import 'package:comiendoportriana/models/bar_response.dart';
 import 'package:comiendoportriana/rest/rest.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:injectable/injectable.dart';
 
-const _postLimit = 20;
-const String urlBase = '/bar/';
+const String urlBase = '/bar';
 
-@Order(-1)
+@Order(-5)
 @singleton
 class BarRepository {
-  late RestClient _rest;
+  late RestAuthenticatedClient _rest;
 
   BarRepository() {
-    _rest = GetIt.I.get<RestClient>();
+    _rest = GetIt.I.get<RestAuthenticatedClient>();
   }
 
-  Future<Bar> fetchBares([int startIndex = 0]) async {
-    String url = urlBase;
-    final response = await _rest.get(url);
-    return Bar.fromJson(jsonDecode(response));
+  Future<BarList> getListaBares(int page) async {
+    String url = "$urlBase?page=$page";
+    var response = await _rest.get(url);
+    return BarList.fromJson(jsonDecode(response));
   }
 
+
+  Future<BarResponse> getBarContent(String barId) async {
+    String url = urlBase + barId;
+    var response = await _rest.get(url);
+    return BarResponse.fromJson(jsonDecode(response));
+  }
 
 
 }

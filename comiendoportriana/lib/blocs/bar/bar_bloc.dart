@@ -1,18 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:comiendoportriana/models/bar.dart';
+import 'package:comiendoportriana/config/locator.dart';
+import 'package:comiendoportriana/models/bar_list.dart';
+import 'package:comiendoportriana/services/bar_service.dart';
 import 'package:equatable/equatable.dart';
-import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:stream_transform/stream_transform.dart';
-import 'package:comiendoportriana/repositories/bar_repository.dart';
 import 'dart:async';
 
 part 'bar_event.dart';
 part 'bar_state.dart';
 
 const throttleDuration = Duration(milliseconds: 100);
-var page = 0;
+const _postLimit = 8;
 
 EventTransformer<E> throttleDroppable<E>(Duration duration) {
   return (events, mapper) {
@@ -21,13 +21,15 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 }
 
 class BarBloc extends Bloc<BarEvent, BarState> {
-  final BarRepository _repo;
+  late final BarService _barService;
 
-  BarBloc(BarRepository barRepository)
-      : assert(barRepository != null),
-        _repo = barRepository,
-        super(BarState()) {
-    on<BarFetched>(_onBarFetched);
+  BarBloc() : super(const BarState()) {
+    _barService = getIt<BarService>();
+
+    on<BarFetched>(
+      _onBarFetched,
+      transformer: throttleDroppable(throttleDuration),
+    );
   }
 
   Future<void> _onBarFetched(
@@ -37,17 +39,26 @@ class BarBloc extends Bloc<BarEvent, BarState> {
     if (state.hasReachedMax) return;
     try {
       if (state.status == BarStatus.initial) {
-        //final posts = await _fetchPosts();
-        final bar = await _repo.fetchBares();
-        final List<BarContent> bares = bar.content!;
+        final bares = await _barService.getListaBares(0);
         return emit(
           state.copyWith(
             status: BarStatus.success,
-            bar: bares,
-            hasReachedMax: false,
+            currentPage: 0,
+            bar: bares.content,
+            hasReachedMax: bares.number! + 1 >= bares.totalPages!,
           ),
         );
       }
+      final bares = await _barService.getListaBares(state.currentPage + 1);
+      emit(
+        state.copyWith(
+          status: BarStatus.success,
+          bar: List.of(state.bar)
+                  ..addAll(bares.content!),
+          hasReachedMax: bares.number! +1 >= bares.totalPages!,
+          currentPage: state.currentPage + 1
+        ),
+      );
     } catch (_) {
       emit(state.copyWith(status: BarStatus.failure));
     }

@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -40,55 +38,53 @@ class HeadersApiInterceptor implements InterceptorContract {
 class RestClient {
 
   var _httpClient;
-
+  
   RestClient() {
-    _httpClient = InterceptedClient.build(interceptors: [HeadersApiInterceptor()]);
+    _httpClient = InterceptedClient.build(interceptors: [HeadersApiInterceptor(), AuthorizationInterceptor()]);
   }
 
   RestClient.withInterceptors(List<InterceptorContract> interceptors) {
-    // El interceptor con los encabezados sobre JSON se añade si no está incluido en la lista
     if (interceptors.where((element) => element is HeadersApiInterceptor).isEmpty) interceptors..add(HeadersApiInterceptor());
     _httpClient = InterceptedClient.build(interceptors: interceptors);
   }
 
-  //final _httpClient = http.Client();
-  
-
 
   Future<dynamic> get(String url) async {
-
     try {
-
         Uri uri = Uri.parse(ApiConstants.baseUrl + url);
-
         final response = await _httpClient.get(uri);
         var responseJson = _response(response);
         return responseJson;
-
-
     } on SocketException catch(ex) {
       throw FetchDataException('No internet connection: ${ex.message}');
     }
-
   }
 
   Future<dynamic> post(String url, dynamic body) async {
-
       try {
-
         Uri uri = Uri.parse(ApiConstants.baseUrl + url);
-
         final response = await _httpClient.post(uri, body: jsonEncode(body));
         var responseJson = _response(response);
         return responseJson;
-
-    /*} on SocketException catch(ex) {
-      throw FetchDataException('No internet connection: ${ex.message}');
-    }*/
     } on Exception catch(ex) {
       throw ex;
     }
+  }
 
+    Future<dynamic> put(String url, dynamic body) async {
+    try {
+      Uri uri = Uri.parse(ApiConstants.baseUrl + url);
+
+      Map<String, String> headers = Map();
+      headers.addAll({"Content-Type": 'application/json'});
+
+      final response =
+          await _httpClient!.put(uri, body: jsonEncode(body), headers: headers);
+      var responseJson = _response(response);
+      return responseJson;
+    } on SocketException catch (ex) {
+      throw Exception('No internet connection: ${ex.message}');
+    }
   }
 
 
@@ -103,11 +99,6 @@ class RestClient {
       case 400:
         throw BadRequestException(utf8.decode(response.bodyBytes));
       case 401:
-        // Así sacamos el mensaje del JSON devuelto por el API
-        //String message = jsonDecode(utf8.decode(response.bodyBytes))['message'];
-        //throw AuthenticationException(message);
-
-        // Así devolvemos un mensaje "genérico"
         throw AuthenticationException("You have entered an invalid username or password");
       case 403:
         throw UnauthorizedException(utf8.decode(response.bodyBytes));
@@ -120,9 +111,6 @@ class RestClient {
     }
   }
 }
-
-// ignore_for_file: prefer_typing_uninitialized_variables
-// ignore_for_file: annotate_overrides
 
 class CustomException implements Exception {
   final message;
@@ -164,11 +152,8 @@ class AuthorizationInterceptor implements InterceptorContract {
   late LocalStorageService _localStorageService;
 
   AuthorizationInterceptor() {
-    //_localStorageService = getIt<LocalStorageService>();
     GetIt.I.getAsync<LocalStorageService>().then((value) => _localStorageService = value);
-
   }
-
 
   @override
   Future<RequestData> interceptRequest({required RequestData data}) async {
@@ -179,21 +164,16 @@ class AuthorizationInterceptor implements InterceptorContract {
     } catch(e) {
       print(e);
     }
-
     return Future.value(data);
-
   }
 
   @override
   Future<ResponseData> interceptResponse({required ResponseData data}) async {
-    
     if (data.statusCode == 401 || data.statusCode == 403) {
       Future.delayed(Duration(seconds: 1), () {
         Navigator.of(GlobalContext.ctx).push<void>(MyApp.route());
       });
     }
-    
-    
     return Future.value(data);
   }
 
@@ -201,7 +181,5 @@ class AuthorizationInterceptor implements InterceptorContract {
 @Order(-10)
 @singleton
 class RestAuthenticatedClient extends RestClient {
-
   RestAuthenticatedClient() : super.withInterceptors(List.of(<InterceptorContract>[AuthorizationInterceptor()]));
-
 }

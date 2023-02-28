@@ -1,4 +1,4 @@
-import 'package:comiendoportriana/pages/bar_page.dart';
+import 'package:comiendoportriana/pages/bares_page.dart';
 import 'package:comiendoportriana/pages/login_page.dart';
 import 'package:comiendoportriana/pages/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
             color: Colors.red.shade800,
         ),
         title: Image.asset('assets/images/logo-title.png',
-            height: 180, 
+            height: 170, 
             color: Colors.white,
         ),
         actions: <Widget>[

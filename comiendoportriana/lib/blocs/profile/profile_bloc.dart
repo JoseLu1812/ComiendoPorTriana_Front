@@ -5,7 +5,6 @@ import 'package:comiendoportriana/models/user.dart';
 import 'package:comiendoportriana/services/services.dart';
 import 'package:equatable/equatable.dart';
 import 'package:comiendoportriana/config/locator.dart';
-import 'package:comiendoportriana/models/login.dart';
 import 'package:comiendoportriana/services/authentication_service.dart';
 
 

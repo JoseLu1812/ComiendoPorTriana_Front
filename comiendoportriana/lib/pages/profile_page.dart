@@ -54,21 +54,19 @@ class _ProfileUIState extends State<ProfileUI> {
                 child: Column(children: [
                   Text(
                     state.user!.username!,
-                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 25),
-                  ),
-                  Text(
-                    state.user!.fullName!,
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 50),
                   ),
                   Container(
                     margin: EdgeInsets.all(5),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            _showAccOptions = !_showAccOptions;
-                          });
-                        },
-                        child: Text("Gestionar cuenta")),
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text('Nombre Completo:', style: TextStyle( fontSize: 15),),
+                        Text(' ${state.user!.fullName}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                      ],
+                    )
                   ),
                   Container(
                     margin: EdgeInsets.all(5),
@@ -81,12 +79,13 @@ class _ProfileUIState extends State<ProfileUI> {
                               .add(UserLoggedOut());
                         },
                         child: Text(
-                          "Log out",
+                          "Cerrar Sesión",
                         )),
                   ),
                 ]),
               ),
             ));
+            
             case ProfileStatus.initial:
               return CircularProgressIndicator();
         }
