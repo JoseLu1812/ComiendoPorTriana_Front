@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/widgets.dart';
 
-const String imgBase = "http://localhost:8080/images/";
+const String imgBase = "http://localhost:8080/download/";
 
 class BaresPage extends StatelessWidget {
   const BaresPage({super.key});
